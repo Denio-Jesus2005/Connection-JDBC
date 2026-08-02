@@ -8,12 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
-
-<<<<<<< HEAD
 import model.exceptions.DbException;
-=======
-import db.DbException;
->>>>>>> eb2f32a9d57e8127a75ddcc58c423bfd49173dd7
 
 public class DBServices {
 
@@ -44,7 +39,7 @@ public class DBServices {
 	}
 	
 	private static Properties loadProperties() {
-		try (FileInputStream fs = new FileInputStream("db.properties")) {
+		try (FileInputStream fs = new FileInputStream("env//db.properties")) {
 			Properties props = new Properties();
 			props.load(fs);
 			return props;
