@@ -50,10 +50,7 @@ public class DepartmentDAOJDBC implements DepartmentDAO {
 			rs = ps.executeQuery();
 			if (conn != null) {
 				if (rs.next()) {
-					int depId = rs.getInt("Id");
-					String name = rs.getString("Name");
-
-					Department dp = new Department(depId, name);
+					Department dp = instantiateDepartment(rs);
 					return dp;
 
 				}
@@ -72,6 +69,12 @@ public class DepartmentDAOJDBC implements DepartmentDAO {
 		}
 
 		return null;
+	}
+
+	private Department instantiateDepartment(ResultSet rs) throws SQLException {
+		int depId = rs.getInt("Id");
+		String name = rs.getString("Name");
+		return new Department(depId, name);
 	}
 
 	@Override

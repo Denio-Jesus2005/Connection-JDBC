@@ -53,19 +53,8 @@ public class SellerDAOJDBC implements SellerDAO {
 
 				rs = ps.executeQuery();
 				if (rs.next()) {
-					int slId = rs.getInt("Id");
-					String name = rs.getString(2);
-					String email = rs.getString(3);
-					LocalDate birthDate = rs.getDate(4).toLocalDate();
-					double baseSalary = rs.getDouble(5);
-					int departmentId = rs.getInt(6);
-					String depName = rs.getString(7);
-
-					Department dep = new Department(departmentId, depName);
-					Seller sl = new Seller(slId, name, email, birthDate, baseSalary, dep);
-
+					Seller sl = instantiateSeller(rs);
 					return sl;
-
 				}
 				if (rs.next()) {
 					throw new DbException("Duplicate id seller");
@@ -80,6 +69,18 @@ public class SellerDAOJDBC implements SellerDAO {
 			DBServices.closeStatement(ps);
 		}
 		return null;
+	}
+
+	private Seller instantiateSeller(ResultSet rs) throws SQLException {
+		int slId = rs.getInt("Id");
+		String name = rs.getString(2);
+		String email = rs.getString(3);
+		LocalDate birthDate = rs.getDate(4).toLocalDate();
+		double baseSalary = rs.getDouble(5);
+		int departmentId = rs.getInt(6);
+		String depName = rs.getString(7);
+		Department dep = new Department(departmentId, depName);
+		return new Seller(slId, name, email, birthDate, baseSalary, dep);
 	}
 
 	@Override
