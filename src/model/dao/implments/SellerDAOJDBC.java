@@ -1,9 +1,11 @@
 package model.dao.implments;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +28,37 @@ public class SellerDAOJDBC implements SellerDAO {
 
 	@Override
 	public void insert(Seller seller) {
-		// TODO Auto-generated method stub
+
+		PreparedStatement ps = null;
+
+		try {
+			ps = conn.prepareStatement("INSERT INTO SELLER" + " (Name, Email, BirthDate, BaseSalary, DepartmentId)"
+					+ " VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+
+			ps.setString(1, seller.getName());
+			ps.setString(2, seller.getEmail());
+			ps.setDate(3, Date.valueOf(seller.getBirthDate()));
+			ps.setDouble(4, seller.getBaseSalary());
+			ps.setInt(5, seller.getDepartment().getId());
+
+			int rowAffected = ps.executeUpdate();
+
+			if (rowAffected > 0) {
+				ResultSet rs = ps.getGeneratedKeys();
+				if (rs.next()) {
+					int id = rs.getInt(1);
+					seller.setId(id);
+				}
+				rs.close();
+			} else {
+				throw new DbException("Unexpected error! No row affected!");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBServices.closeStatement(ps);
+		}
 
 	}
 
@@ -113,7 +145,7 @@ public class SellerDAOJDBC implements SellerDAO {
 					dep = instantiateDepartment(rs);
 					departments.put(rs.getInt("DepartmentId"), dep);
 				}
-				
+
 				Seller seller = instantiateSeller(rs, dep);
 
 				sellers.add(seller);
