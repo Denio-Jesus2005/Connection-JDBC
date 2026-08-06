@@ -64,13 +64,54 @@ public class SellerDAOJDBC implements SellerDAO {
 
 	@Override
 	public void update(Seller seller) {
-		// TODO Auto-generated method stub
 
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement("UPDATE SELLER SET"
+					+ " Name = ?,"
+					+ " Email = ?,"
+					+ " BirthDate = ?,"
+					+ " BaseSalary = ?,"
+					+ " DepartmentId = ?"
+					+ " WHERE Id = ?");
+			
+			ps.setString(1, seller.getName());
+			ps.setString(2, seller.getEmail());
+			ps.setDate(3, Date.valueOf(seller.getBirthDate()));
+			ps.setDouble(4, seller.getBaseSalary());
+			ps.setInt(5, seller.getDepartment().getId());
+			ps.setInt(6, seller.getId());
+			
+			int rowsAffected = ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBServices.closeStatement(ps);
+		}
+		
 	}
 
 	@Override
 	public void deleteById(int id) {
-		// TODO Auto-generated method stub
+
+		PreparedStatement ps = null;
+
+		try {
+			ps = conn.prepareStatement("DELETE FROM SELLER WHERE ID = ?");
+			ps.setInt(1, id);
+
+			int rowsAffected = ps.executeUpdate();
+
+			if (rowsAffected == 0) {
+				throw new DbException("Unexpected error! Not deleted");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBServices.closeStatement(ps);
+		}
 
 	}
 
