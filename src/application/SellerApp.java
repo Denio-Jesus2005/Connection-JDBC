@@ -9,7 +9,7 @@ import model.dao.SellerDAO;
 import model.entities.Department;
 import model.entities.Seller;
 
-public class Program {
+public class SellerApp {
 
 	public static void main(String[] args) {
 
@@ -48,6 +48,7 @@ public class Program {
 		sel = new Seller(null, "UPDATED", "denios", LocalDate.parse("07/11/2005", fmt), 3.200, department);
 		
 		sellerDao.insert(sel);
+		System.out.println("Inserted");
 		System.out.println();
 		
 		System.out.println("----------------------TEST 5: UPDATE----------------------");
@@ -55,11 +56,12 @@ public class Program {
 		Seller sel1 = new Seller(6, "UPDATED", "UPDATED", LocalDate.parse("01/01/2001", fmt), 10, new Department(4, null));
 		
 		sellerDao.update(sel1);
-
+		System.out.println("Updated");
+		
 		System.out.println("----------------------TEST 6: DELETE BY ID----------------------");
 		
-		sellerDao.deleteById(14);		
-		
+		sellerDao.deleteById(7);
+		System.out.println("Deleted");
 	}
 
 }

@@ -14,6 +14,6 @@ public interface DepartmentDAO {
 
 	Department findById(int id);
 
-	List<Department> findAll(Department dep);
+	List<Department> findAll();
 
 }
